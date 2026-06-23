@@ -1,0 +1,44 @@
+{
+  "name": "wu/easy-verify-dy",
+  "description": "抖音核销",
+  "keywords": [
+    "laravel",
+    "douyin",
+    "verify",
+    "easy-verify"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "yf-wu",
+      "email": "yf-wu@qq.com"
+    }
+  ],
+  "require": {
+    "php": "^8.0",
+    "ext-bcmath": "*",
+    "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+    "illuminate/http": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+    "illuminate/validation": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+    "wu/easy-verify-common": "dev-main"
+  },
+  "autoload": {
+    "psr-4": {
+      "Wu\\EasyVerifyDy\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Wu\\EasyVerifyDy\\Providers\\ServiceProvider"
+      ]
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/m-finder/easy-verify-common"
+    }
+  ]
+}
