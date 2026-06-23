@@ -8,7 +8,7 @@ use Wu\EasyVerifyCommon\HttpResult;
 class Result implements HttpResult
 {
     public function __construct(
-        private $response = []
+        protected $response = []
     ){
 
     }

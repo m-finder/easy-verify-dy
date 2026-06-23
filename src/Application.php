@@ -3,6 +3,7 @@
 namespace Wu\EasyVerifyDy;
 
 use Illuminate\Support\Facades\Http;
+use Wu\EasyVerifyDy\Results\CancelResult;
 use Wu\EasyVerifyDy\Results\PrepareResult;
 use Wu\EasyVerifyDy\Results\VerifyResult;
 
@@ -111,14 +112,14 @@ class Application
     public function verify(string $verifyToken, array $codes, string $storeId): VerifyResult
     {
         validator([
-            'verifyToken' => $verifyToken,
-            'encryptedCodes' => $codes,
-            'storeId' => $storeId,
+            'verify_token' => $verifyToken,
+            'encrypted_codes' => $codes,
+            'store_id' => $storeId,
             'token' => $this->token,
         ], [
-            'verifyToken' => 'required|string',
-            'encryptedCodes' => 'required|array',
-            'storeId' => 'required|string',
+            'verify_token' => 'required|string',
+            'encrypted_codes' => 'required|array',
+            'store_id' => 'required|string',
             'token' => 'required|string',
         ]);
 
@@ -131,6 +132,40 @@ class Application
         ];
 
         return new VerifyResult($this->request($url, $params, 'post'));
+    }
+
+    /**
+     * 取消核销
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel
+     * @param string $certificateId
+     * @param string $verifyId
+     * @param string $accountId
+     * @return CancelResult
+     */
+    public function cancel(string $certificateId, string $verifyId, string $accountId = ''): CancelResult
+    {
+
+        validator([
+            'certificate_id' => $certificateId,
+            'verify_id' => $verifyId,
+            'account_id' => $accountId,
+            'token' => $this->token,
+        ], [
+            'certificate_id' => 'required|string',
+            'verify_id' => 'required|array',
+            'account_id' => 'nullable|string',
+            'token' => 'required|string',
+        ]);
+
+        $url = '/goodlife/v1/fulfilment/certificate/cancel';
+
+        $params = [
+            'certificate_id' => $certificateId,
+            'verify_id' => $verifyId,
+            'account_id' => $accountId,
+        ];
+
+        return new CancelResult($this->request($url, $params, 'post'));
     }
 
     /**
