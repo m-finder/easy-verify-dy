@@ -33,7 +33,7 @@ class Application
     }
 
     /**
-     * 验券准备
+     * 验券准备-二维码短链提取 object_id
      * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare
      * @param string $url
      * @return string
