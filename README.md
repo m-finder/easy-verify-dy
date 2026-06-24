@@ -13,13 +13,14 @@
 * [验券准备-code](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare)
 * [验券](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.verify)
 * [撤销核销](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel)
+* [撤销核销-批量撤销次卡订单下的一批验券记录](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel)
 
 #### 使用示例
 * 发布并配置
 ```shell
 php artisan vendor:publish --provider="Wu\EasyVerifyDy\Providers\ServiceProvider"
 ```
-* 验券准备-短链换 object_id
+* 验券准备-二维码短链提取 object_id
 ```php
 public function test_parsing()
 {
@@ -75,6 +76,22 @@ public function test_cancel()
     $verifyId = '7513110825529133096';
 
     $res = new Application($this->token)->cancel($certId, $verifyId);
+    var_dump($res->getCancelResults());
+    echo $res->getReason(), PHP_EOL;
+}
+```
+
+* 撤销核销-批量撤销次卡订单下的一批验券记录
+```php
+public function test_times_card_cancel_batch()
+{
+    $params = [
+        'order_id' => '1085741005608348523',
+        'verify_id_list' => [
+            '7513110825529133096',
+        ]
+    ];
+    $res = new Application($this->token)->cancelBatch($params);
     var_dump($res->getCancelResults());
     echo $res->getReason(), PHP_EOL;
 }

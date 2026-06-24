@@ -135,7 +135,7 @@ class Application
     }
 
     /**
-     * 取消核销
+     * 撤销核销
      * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel
      * @param string $certificateId
      * @param string $verifyId
@@ -163,6 +163,40 @@ class Application
             'certificate_id' => $certificateId,
             'verify_id' => $verifyId,
             'account_id' => $accountId,
+        ];
+
+        return new CancelResult($this->request($url, $params, 'post'));
+    }
+
+    /**
+     * 撤销核销-批量撤销次卡订单下的一批验券记录
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel
+     * @param array $list
+     * @param string $accountId
+     * @return CancelResult
+     */
+    public function cancelBatch(array $list, string $accountId = ''): CancelResult
+    {
+
+        validator([
+            'batch_cancel_info' => $list,
+            'account_id' => $accountId,
+            'token' => $this->token,
+        ], [
+            'batch_cancel_info' => 'required|array',
+            'batch_cancel_info.order_id' => 'required|string',
+            'batch_cancel_info.*.verify_id_list' => 'required|array|min:1',
+            'account_id' => 'nullable|string',
+            'token' => 'required|string',
+        ]);
+
+        $url = '/goodlife/v1/fulfilment/certificate/cancel';
+
+        $params = [
+            'certificate_id' => '0',
+            'verify_id' => '0',
+            'account_id' => $accountId,
+            'batch_cancel_info' => $list
         ];
 
         return new CancelResult($this->request($url, $params, 'post'));
