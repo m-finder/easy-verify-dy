@@ -9,7 +9,6 @@ use Wu\EasyVerifyDy\Results\CodeQueryByOrderIdResult;
 use Wu\EasyVerifyDy\Results\OrderQueryResult;
 use Wu\EasyVerifyDy\Results\PrepareResult;
 use Wu\EasyVerifyDy\Results\CodeQueryResult;
-use Wu\EasyVerifyDy\Results\Result;
 use Wu\EasyVerifyDy\Results\StoreQueryResult;
 use Wu\EasyVerifyDy\Results\VerifyResult;
 
