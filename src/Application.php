@@ -4,10 +4,12 @@ namespace Wu\EasyVerifyDy;
 
 use Illuminate\Support\Facades\Http;
 use Wu\EasyVerifyDy\Results\CancelResult;
+use Wu\EasyVerifyDy\Results\ClientTokenResult;
 use Wu\EasyVerifyDy\Results\CodeQueryByOrderIdResult;
 use Wu\EasyVerifyDy\Results\OrderQueryResult;
 use Wu\EasyVerifyDy\Results\PrepareResult;
 use Wu\EasyVerifyDy\Results\CodeQueryResult;
+use Wu\EasyVerifyDy\Results\Result;
 use Wu\EasyVerifyDy\Results\StoreQueryResult;
 use Wu\EasyVerifyDy\Results\VerifyResult;
 
@@ -34,6 +36,21 @@ class Application
     {
         $this->token = $token;
         return $this;
+    }
+
+    /**
+     * 生成client-token
+     * @return ClientTokenResult
+     */
+    public function getClientToken(): ClientTokenResult
+    {
+        $url = '/oauth/client_token';
+        $params = [
+            'client_key' => $this->clientKey,
+            'client_secret' => $this->clientSecret,
+            'grant_type' => 'client_credential'
+        ];
+        return new ClientTokenResult($this->request($url, $params));
     }
 
     /**

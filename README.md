@@ -9,7 +9,7 @@
 
 #### 接口清单
 ##### 团购核销接口
-* todo [生成 client-token](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/preparation/client_token)
+* [生成 client-token](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/preparation/client_token)
 * [验券准备-二维码短链提取 object_id](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare)
 * [验券准备-encrypted_data (object_id)](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare)
 * [验券准备-code](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare)
@@ -30,6 +30,19 @@ php artisan vendor:publish --provider="Wu\EasyVerifyDy\Providers\ServiceProvider
 ```
 
 ##### 团购核销接口
+
+* 生成 client-token
+```php
+public function test_get_client_token()
+{
+    $res = new Application($this->token)->getClientToken();
+    echo $res->getAccessToken(), PHP_EOL;
+    echo $res->getExpiresIn(), PHP_EOL;
+    echo Carbon::now()->addSeconds()->format('Y-m-d H:i:s'), PHP_EOL;
+    echo Carbon::now()->addSeconds()->toDateTimeLocalString(), PHP_EOL;
+}
+```
+
 * 验券准备-二维码短链提取 object_id
 ```php
 public function test_parsing()
