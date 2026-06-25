@@ -4,7 +4,9 @@ namespace Wu\EasyVerifyDy;
 
 use Illuminate\Support\Facades\Http;
 use Wu\EasyVerifyDy\Results\CancelResult;
+use Wu\EasyVerifyDy\Results\OrderQueryResult;
 use Wu\EasyVerifyDy\Results\PrepareResult;
+use Wu\EasyVerifyDy\Results\CodeQueryResult;
 use Wu\EasyVerifyDy\Results\VerifyResult;
 
 class Application
@@ -203,6 +205,81 @@ class Application
     }
 
     /**
+     * 券状态查询
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.get
+     * @param string $code
+     * @param string $accountId
+     * @return CodeQueryResult
+     */
+    public function codeQuery(string $code, string $accountId = ''): CodeQueryResult
+    {
+
+        validator([
+            'code' => $code,
+            'account_id' => $accountId,
+            'token' => $this->token,
+        ], [
+            'code' => 'required|string',
+            'account_id' => 'nullable|string',
+            'token' => 'required|string',
+        ]);
+
+        $url = '/goodlife/v1/fulfilment/certificate/get';
+
+        $params = [
+            'encrypted_code' => $code,
+            'account_id' => $accountId,
+        ];
+
+        return new CodeQueryResult($this->request($url, $params));
+    }
+
+    /**
+     * 订单查询
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/order.query/query
+     * @param array $params
+     * @return OrderQueryResult
+     */
+    public function orderQuery(array $params): OrderQueryResult
+    {
+
+        validator([
+            'page_num' => $params['page_num'],
+            'page_size' => $params['page_size'],
+            'create_order_end_time' => $params['create_order_end_time'] ?? null,
+            'create_order_start_time' => $params['create_order_start_time'] ?? null,
+            'cursor' => $params['cursor'] ?? null,
+            'ext_order_id' => $params['ext_order_id'] ?? null,
+            'get_secret_number' => $params['get_secret_number'] ?? null,
+            'open_id' => $params['open_id'] ?? null,
+            'order_id' => $params['order_id'] ?? null,
+            'order_status' => $params['order_status'] ?? null,
+            'update_order_end_time' => $params['update_order_end_time'] ?? null,
+            'update_order_start_time' => $params['update_order_start_time'] ?? null,
+            'account_id' => $params['account_id'] ?? null,
+            'token' => $this->token,
+        ], [
+            'page_num' => 'required|num',
+            'page_size' => 'required|num',
+            'create_order_end_time' => 'nullable|num',
+            'create_order_start_time' => 'nullable|num',
+            'cursor' => 'nullable|array',
+            'ext_order_id' => 'nullable|string',
+            'get_secret_number' => 'nullable|boolean',
+            'open_id' => 'nullable|string',
+            'order_id' => 'nullable|string',
+            'order_status' => 'nullable|num',
+            'update_order_end_time' => 'nullable|num',
+            'update_order_start_time' => 'nullable|num',
+            'account_id' => 'required|string',
+            'token' => 'required|string',
+        ]);
+
+        $url = '/goodlife/v1/trade/order/query';
+        return new OrderQueryResult($this->request($url, $params));
+    }
+
+    /**
      * 接口请求
      * @param string $url
      * @param array $params
@@ -240,13 +317,17 @@ class Application
                 ]);
             }
 
+            if($result['data']['error_code'] === 2190008){
+                abort(403, $result['data']['description']);
+            }
+
             return $result;
         } catch (\Exception $e) {
             info('抖音参数解析失败: ', [
                 'url' => $url,
                 'message' => $e->getMessage(),
             ]);
-            abort(500, $e->getMessage() ?? '抖音参数解析失败');
+            abort($e->getCode(), $e->getMessage() ?? '抖音参数解析失败');
         }
 
     }

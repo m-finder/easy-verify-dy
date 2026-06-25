@@ -58,6 +58,11 @@ class PrepareResult extends Result implements HttpResult
         return $this->getSku()['title'] ?? null;
     }
 
+    public function getSkuGrouponType()
+    {
+        return $this->getSku()['groupon_type'] ?? null;
+    }
+
     public function getAccountId()
     {
         return $this->getSku()['account_id'] ?? null;

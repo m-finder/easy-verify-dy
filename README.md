@@ -15,9 +15,9 @@
 * [验券](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.verify)
 * [撤销核销](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel)
 * [撤销核销-批量撤销次卡订单下的一批验券记录](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel)
-* todo [券状态查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.get)
+* [券状态查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.get)
 * todo [券状态批量查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.query)
-* todo [订单查询](https://open.douyin.com/goodlife/v1/trade/order/query/)
+* [订单查询](https://open.douyin.com/goodlife/v1/trade/order/query/)
 
 #### 使用示例
 * 发布并配置
@@ -41,6 +41,9 @@ public function test_prepare_by_encrypt_data()
     echo $res->getLogId(), PHP_EOL;
     echo $res->getOrderId(), PHP_EOL;
     echo $res->getVerifyToken(), PHP_EOL;
+    echo $res->getSkuTitle(), PHP_EOL;
+    echo $res->getSkuGrouponType(), PHP_EOL;
+    echo $res->getSkuId(), PHP_EOL;
 }
 ```
 
@@ -53,6 +56,9 @@ public function test_prepare_by_code()
     echo $res->getLogId(), PHP_EOL;
     echo $res->getOrderId(), PHP_EOL;
     echo $res->getVerifyToken(), PHP_EOL;
+    echo $res->getSkuTitle(), PHP_EOL;
+    echo $res->getSkuGrouponType(), PHP_EOL;
+    echo $res->getSkuId(), PHP_EOL;
 }
 ```
 * 验券
@@ -98,5 +104,36 @@ public function test_times_card_cancel_batch()
     $res = new Application($this->token)->cancelBatch($params);
     var_dump($res->getCancelResults());
     echo $res->getReason(), PHP_EOL;
+}
+```
+
+* 券状态查询
+```php
+public function test_code_query()
+{
+    $code = 'CgYIASAHKAESLgosGcK8ZgM/CvL/rhRBlKeLShVHvPuSbuwpQjONP8PlKtWEKJDFcB0N7cojZ44aAA==';
+    $res = new Application($this->token)->codeQuery($code);
+    echo $res->getReason(), PHP_EOL;
+    echo $res->getStatus(), PHP_EOL;
+    echo $res->getSkuId(), PHP_EOL;
+    echo $res->getSkuTitle(), PHP_EOL;
+    echo $res->getSkuGrouponType(), PHP_EOL;
+    var_dump($res->getTimeCard());
+    var_dump($res->getVerify());
+}
+```
+
+* 订单查询
+```php
+public function test_order_query()
+{
+    $params = [
+        'page_num' => 1,
+        'page_size' => 2,
+        'account_id' => config('verify.dy.account_id'),
+    ];
+    $res = new Application($this->token)->orderQuery($params);
+    echo count($res->getOrders()), PHP_EOL;
+    var_dump($res->getOrders());
 }
 ```
