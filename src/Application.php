@@ -259,8 +259,8 @@ class Application
             'account_id' => $params['account_id'] ?? null,
             'token' => $this->token,
         ], [
-            'page_num' => 'required|num',
-            'page_size' => 'required|num',
+            'page_num' => 'required|num|min:1|max:10000',
+            'page_size' => 'required|num|min:1',
             'create_order_end_time' => 'nullable|num',
             'create_order_start_time' => 'nullable|num',
             'cursor' => 'nullable|array',

@@ -8,6 +8,7 @@
 # easy verify 抖音模块.
 
 #### 接口清单
+##### 通用接口
 * todo [生成 client-token](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/preparation/client_token)
 * [验券准备-二维码短链提取 object_id](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare)
 * [验券准备-encrypted_data (object_id)](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare)
@@ -17,7 +18,10 @@
 * [撤销核销-批量撤销次卡订单下的一批验券记录](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel)
 * [券状态查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.get)
 * todo [券状态批量查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.query)
+##### 订单查询
 * [订单查询](https://open.douyin.com/goodlife/v1/trade/order/query/)
+##### 门店接口
+* todo [查询门店信息](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.shop/store-management/shop.query)
 
 #### 使用示例
 * 发布并配置
