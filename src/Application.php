@@ -357,6 +357,33 @@ class Application
     }
 
     /**
+     * 售后单详情查询
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/after-sale-order-detail
+     * @param string $orderId
+     * @param string $accountId
+     * @param string $certificateId
+     * @return StoreQueryResult
+     */
+    public function refundQuery(string $orderId, string $accountId, string $certificateId = ''): StoreQueryResult
+    {
+
+        validator([
+            'order_id' => $orderId,
+            'certificate_id' => $accountId,
+            'account_id' => $accountId,
+            'token' => $this->token,
+        ], [
+            'order_id' => 'required|string',
+            'account_id' => 'required|string',
+            'certificate_id' => 'nullable|string',
+            'token' => 'required|string',
+        ]);
+
+        $url = '/goodlife/v1/akte/after_sale/order_detail/get';
+        return new StoreQueryResult($this->request($url, $params));
+    }
+
+    /**
      * 接口请求
      * @param string $url
      * @param array $params
