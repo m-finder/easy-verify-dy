@@ -38,7 +38,8 @@ class Application
     }
 
     /**
-     * 生成client-token
+     * 生成 client-token
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/preparation/client_token
      * @return ClientTokenResult
      */
     public function getClientToken(): ClientTokenResult
