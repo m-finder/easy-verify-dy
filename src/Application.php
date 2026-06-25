@@ -193,17 +193,17 @@ class Application
      * @param string $accountId
      * @return CancelResult
      */
-    public function cancelBatch(array $list, string $accountId = ''): CancelResult
+    public function cancelBatch(string $orderId, array $list, string $accountId = ''): CancelResult
     {
-
         validator([
-            'batch_cancel_info' => $list,
+            'order_id' => $orderId,
+            'verify_id_list' => $list,
             'account_id' => $accountId,
             'token' => $this->token,
         ], [
-            'batch_cancel_info' => 'required|array',
-            'batch_cancel_info.order_id' => 'required|string',
-            'batch_cancel_info.*.verify_id_list' => 'required|array|min:1',
+            'order_id' => 'required|string',
+            'verify_id_list' => 'required|array|min:1',
+            'verify_id_list.*' => 'required|string',
             'account_id' => 'nullable|string',
             'token' => 'required|string',
         ]);
@@ -214,7 +214,10 @@ class Application
             'certificate_id' => '0',
             'verify_id' => '0',
             'account_id' => $accountId,
-            'batch_cancel_info' => $list
+            'batch_cancel_info' => [
+                'order_id' => $orderId,
+                'verify_id_list' => $list
+            ]
         ];
 
         return new CancelResult($this->request($url, $params, 'post'));
