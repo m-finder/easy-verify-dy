@@ -19,10 +19,7 @@ class Application
     protected string $clientKey = '';
     protected string $clientSecret = '';
 
-    public function __construct(
-        protected $token = ''
-    )
-    {
+    public function __construct(protected $token = ''){
         $this->clientKey = config('verify.dy.client_key');
         $this->clientSecret = config('verify.dy.client_secret');
 
@@ -403,11 +400,11 @@ class Application
 
             return $result;
         } catch (\Exception $e) {
-            info('抖音参数解析失败: ', [
+            info('抖音接口出错: ', [
                 'url' => $url,
                 'message' => $e->getMessage(),
             ]);
-            abort($e->getCode(), $e->getMessage() ?? '抖音参数解析失败');
+            abort($e->getCode(), $e->getMessage() ?? '抖音接口出错');
         }
 
     }
