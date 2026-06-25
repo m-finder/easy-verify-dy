@@ -4,9 +4,11 @@ namespace Wu\EasyVerifyDy;
 
 use Illuminate\Support\Facades\Http;
 use Wu\EasyVerifyDy\Results\CancelResult;
+use Wu\EasyVerifyDy\Results\CodeQueryByOrderIdResult;
 use Wu\EasyVerifyDy\Results\OrderQueryResult;
 use Wu\EasyVerifyDy\Results\PrepareResult;
 use Wu\EasyVerifyDy\Results\CodeQueryResult;
+use Wu\EasyVerifyDy\Results\StoreQueryResult;
 use Wu\EasyVerifyDy\Results\VerifyResult;
 
 class Application
@@ -235,6 +237,36 @@ class Application
     }
 
     /**
+     * 券状态批量查询
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.query
+     * @param string $orderId
+     * @param string $accountId
+     * @return CodeQueryByOrderIdResult
+     */
+    public function codeQueryByOrderId(string $orderId, string $accountId = ''): CodeQueryByOrderIdResult
+    {
+
+        validator([
+            'order_id' => $orderId,
+            'account_id' => $accountId,
+            'token' => $this->token,
+        ], [
+            'code' => 'required|string',
+            'account_id' => 'nullable|string',
+            'token' => 'required|string',
+        ]);
+
+        $url = '/goodlife/v1/fulfilment/certificate/query';
+
+        $params = [
+            'order_id' => $orderId,
+            'account_id' => $accountId,
+        ];
+
+        return new CodeQueryByOrderIdResult($this->request($url, $params));
+    }
+
+    /**
      * 订单查询
      * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/order.query/query
      * @param array $params
@@ -277,6 +309,37 @@ class Application
 
         $url = '/goodlife/v1/trade/order/query';
         return new OrderQueryResult($this->request($url, $params));
+    }
+
+    /**
+     * 查询门店信息
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.shop/store-management/shop.query
+     * @param array $params
+     * @return StoreQueryResult
+     */
+    public function storeQuery(array $params): StoreQueryResult
+    {
+
+        validator([
+            'page' => $params['page_num'],
+            'size' => $params['page_size'],
+            'poi_id' => $params['poi_id'] ?? null,
+            'relation_type' => $params['relation_type'] ?? null,
+            'third_id' => $params['third_id'] ?? null,
+            'account_id' => $params['account_id'] ?? null,
+            'token' => $this->token,
+        ], [
+            'page' => 'required|num|min:1|max:10000',
+            'size' => 'required|num|min:1|max:50',
+            'poi_id' => 'nullable|num',
+            'relation_type' => 'nullable|num|in:0,1,2',
+            'third_id' => 'nullable|array',
+            'account_id' => 'required|string',
+            'token' => 'required|string',
+        ]);
+
+        $url = '/goodlife/v1/shop/poi/query';
+        return new StoreQueryResult($this->request($url, $params));
     }
 
     /**

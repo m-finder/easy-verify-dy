@@ -17,17 +17,19 @@
 * [撤销核销](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel)
 * [撤销核销-批量撤销次卡订单下的一批验券记录](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel)
 * [券状态查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.get)
-* todo [券状态批量查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.query)
+* [券状态批量查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.query)
 ##### 订单查询接口
 * [订单查询](https://open.douyin.com/goodlife/v1/trade/order/query/)
 ##### 门店相关接口
-* todo [查询门店信息](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.shop/store-management/shop.query)
+* [查询门店信息](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.shop/store-management/shop.query)
 
 #### 使用示例
 * 发布并配置
 ```shell
 php artisan vendor:publish --provider="Wu\EasyVerifyDy\Providers\ServiceProvider"
 ```
+
+##### 团购核销接口
 * 验券准备-二维码短链提取 object_id
 ```php
 public function test_parsing()
@@ -127,6 +129,18 @@ public function test_code_query()
 }
 ```
 
+* 券状态批量查询
+```php
+public function test_code_query_by_order_id()
+{
+    $code = '1085741005608348523';
+    $res = new Application($this->token)->codeQueryByOrderId($code);
+    echo $res->getReason(), PHP_EOL;
+    var_dump($res->getCertificates());
+}
+```
+
+##### 订单查询接口
 * 订单查询
 ```php
 public function test_order_query()
@@ -139,5 +153,21 @@ public function test_order_query()
     $res = new Application($this->token)->orderQuery($params);
     echo count($res->getOrders()), PHP_EOL;
     var_dump($res->getOrders());
+}
+```
+
+##### 门店相关接口
+* 查询门店信息
+```php
+public function test_store_query()
+{
+    $params = [
+        'page_num' => 1,
+        'page_size' => 2,
+        'account_id' => config('verify.dy.account_id'),
+    ];
+    $res = new Application($this->token)->storeQuery($params);
+    echo count($res->getStores()), PHP_EOL;
+    var_dump($res->getStores());
 }
 ```
