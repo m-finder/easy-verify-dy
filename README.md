@@ -27,6 +27,11 @@
 * [查询门店信息](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.shop/store-management/shop.query)
 
 #### 使用示例
+* 安装
+```shell
+composer require wu/easy-verify-dy
+```
+
 * 发布并配置
 ```shell
 php artisan vendor:publish --provider="Wu\EasyVerifyDy\Providers\ServiceProvider"
