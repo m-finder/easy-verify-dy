@@ -9,6 +9,7 @@ use Wu\EasyVerifyDy\Results\CodeQueryByOrderIdResult;
 use Wu\EasyVerifyDy\Results\OrderQueryResult;
 use Wu\EasyVerifyDy\Results\PrepareResult;
 use Wu\EasyVerifyDy\Results\CodeQueryResult;
+use Wu\EasyVerifyDy\Results\RefundQueryResult;
 use Wu\EasyVerifyDy\Results\StoreQueryResult;
 use Wu\EasyVerifyDy\Results\VerifyResult;
 
@@ -362,17 +363,17 @@ class Application
     /**
      * 售后单详情查询
      * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/after-sale-order-detail
-     * @param string $orderId
      * @param string $accountId
+     * @param string $orderId
      * @param string $certificateId
-     * @return StoreQueryResult
+     * @return RefundQueryResult
      */
-    public function refundQuery(string $orderId, string $accountId, string $certificateId = ''): StoreQueryResult
+    public function refundQuery(string $accountId, string $orderId, string $certificateId = ''): RefundQueryResult
     {
 
         validator([
             'order_id' => $orderId,
-            'certificate_id' => $accountId,
+            'certificate_id' => $certificateId,
             'account_id' => $accountId,
             'token' => $this->token,
         ], [
@@ -382,8 +383,14 @@ class Application
             'token' => 'required|string',
         ]);
 
+        $params = [
+            'order_id' => $orderId,
+            'certificate_id' => $certificateId,
+            'account_id' => $accountId,
+        ];
+
         $url = '/goodlife/v1/akte/after_sale/order_detail/get';
-        return new StoreQueryResult($this->request($url, $params));
+        return new RefundQueryResult($this->request($url, $params));
     }
 
     /**

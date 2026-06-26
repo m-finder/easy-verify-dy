@@ -18,6 +18,8 @@
 * [撤销核销-批量撤销次卡订单下的一批验券记录](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel)
 * [券状态查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.get)
 * [券状态批量查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.query)
+###### 团购退款
+* [售后单详情查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/after-sale-order-detail)
 ##### 订单查询接口
 * [订单查询](https://open.douyin.com/goodlife/v1/trade/order/query/)
 ##### 门店相关接口
@@ -150,6 +152,22 @@ public function test_code_query_by_order_id()
     $res = new Application($this->token)->codeQueryByOrderId($code);
     echo $res->getReason(), PHP_EOL;
     var_dump($res->getCertificates());
+}
+```
+
+##### 团购退款
+* 售后单详情查询
+```php
+public function test_refund_query()
+{
+
+    $certId = '7513089961583886362';
+    $orderId = '1085741005608348523';
+    $accountId = config('verify.dy.account_id');
+
+    $res = new Application($this->token)->refundQuery($accountId, $orderId, $certId);
+    var_dump($res->getReason());
+    var_dump($res->getList());
 }
 ```
 
