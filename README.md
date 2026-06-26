@@ -8,8 +8,9 @@
 # easy verify 抖音模块.
 
 #### 接口清单
-##### 团购核销接口
+##### token 接口
 * [生成 client-token](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/preparation/client_token)
+##### 团购核销接口
 * [验券准备-二维码短链提取 object_id](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare)
 * [验券准备-encrypted_data (object_id)](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare)
 * [验券准备-code](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.prepare)
@@ -31,8 +32,7 @@
 php artisan vendor:publish --provider="Wu\EasyVerifyDy\Providers\ServiceProvider"
 ```
 
-##### 团购核销接口
-
+##### token 接口
 * 生成 client-token
 ```php
 public function test_get_client_token()
@@ -45,6 +45,7 @@ public function test_get_client_token()
 }
 ```
 
+##### 团购核销接口
 * 验券准备-二维码短链提取 object_id
 ```php
 public function test_parsing()
@@ -53,6 +54,7 @@ public function test_parsing()
     echo '二维码短链提取 object_id:', $string, PHP_EOL;
 }
 ```
+
 * 验券准备-encrypted_data (object_id)
 ```php
 public function test_prepare_by_encrypt_data()
