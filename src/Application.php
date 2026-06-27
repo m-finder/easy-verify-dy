@@ -195,6 +195,7 @@ class Application
     /**
      * 撤销核销-批量撤销次卡订单下的一批验券记录
      * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.cancel
+     * @param string $orderId
      * @param array $list
      * @param string $accountId
      * @return CancelResult
