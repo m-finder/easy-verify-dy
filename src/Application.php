@@ -294,8 +294,8 @@ class Application
     {
 
         validator([
-            'page_num' => $params['page_num'],
-            'page_size' => $params['page_size'],
+            'page_num' => $params['page_num'] ?? null,
+            'page_size' => $params['page_size'] ?? null,
             'create_order_end_time' => $params['create_order_end_time'] ?? null,
             'create_order_start_time' => $params['create_order_start_time'] ?? null,
             'cursor' => $params['cursor'] ?? null,
@@ -311,16 +311,16 @@ class Application
         ], [
             'page_num' => 'required|num|min:1|max:10000',
             'page_size' => 'required|num|min:1',
-            'create_order_end_time' => 'nullable|num',
-            'create_order_start_time' => 'nullable|num',
+            'create_order_end_time' => 'nullable',
+            'create_order_start_time' => 'nullable',
             'cursor' => 'nullable|array',
             'ext_order_id' => 'nullable|string',
             'get_secret_number' => 'nullable|boolean',
             'open_id' => 'nullable|string',
             'order_id' => 'nullable|string',
             'order_status' => 'nullable|num',
-            'update_order_end_time' => 'nullable|num',
-            'update_order_start_time' => 'nullable|num',
+            'update_order_end_time' => 'nullable',
+            'update_order_start_time' => 'nullable',
             'account_id' => 'required|string',
             'token' => 'required|string',
         ]);
@@ -339,8 +339,8 @@ class Application
     {
 
         validator([
-            'page' => $params['page_num'],
-            'size' => $params['page_size'],
+            'page' => $params['page_num'] ?? null,
+            'size' => $params['page_size'] ?? null,
             'poi_id' => $params['poi_id'] ?? null,
             'relation_type' => $params['relation_type'] ?? null,
             'third_id' => $params['third_id'] ?? null,
@@ -390,6 +390,41 @@ class Application
         ];
 
         $url = '/goodlife/v1/akte/after_sale/order_detail/get';
+        return new RefundQueryResult($this->request($url, $params));
+    }
+
+    /**
+     * 退款单列表查询
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/refund-list-query
+     * @param array $params
+     * @return RefundQueryResult
+     */
+    public function refundListQuery(array $params): RefundQueryResult
+    {
+
+        validator([
+            'page_size' => $params['page_size'] ?? null,
+            'create_order_end_time' => $params['create_order_end_time'] ?? null,
+            'create_order_start_time' => $params['create_order_start_time'] ?? null,
+            'cursor' => $params['cursor'] ?? '0',
+            'refund_done_end_time' => $params['refund_done_end_time'] ?? null,
+            'refund_done_start_time' => $params['refund_done_start_time'] ?? null,
+            'refund_status' => $params['refund_status'] ?? null,
+            'account_id' => $params['account_id'] ?? null,
+            'token' => $this->token,
+        ], [
+            'page_size' => 'required|num|min:1|max:100',
+            'create_order_end_time' => 'nullable',
+            'create_order_start_time' => 'nullable',
+            'cursor' => 'nullable',
+            'refund_done_end_time' => 'nullable',
+            'refund_done_start_time' => 'nullable',
+            'refund_status' => 'nullable|in:9,10,20,25,30,40,50,59',
+            'account_id' => 'required|string',
+            'token' => 'required|string',
+        ]);
+
+        $url = '/goodlife/v1/akte/after_sale/order/query';
         return new RefundQueryResult($this->request($url, $params));
     }
 

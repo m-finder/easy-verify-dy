@@ -3,6 +3,7 @@
 <img src="https://img.shields.io/badge/Author-m--finder-red">
 <img src="https://img.shields.io/badge/Laravel->=10.0-red">
 <img src="https://img.shields.io/badge/PHP->=8.0-red">
+<a href="https://packagist.org/packages/wu/easy-verify-dy"><img src="https://img.shields.io/badge/License-MIT-green" alt="License"></a>
 </p>
 
 # easy verify 抖音模块.
@@ -21,6 +22,7 @@
 * [券状态批量查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/life.capacity.fulfilment/certificate.query)
 ###### 团购退款
 * [售后单详情查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/after-sale-order-detail)
+* [退款单列表查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/refund-list-query)
 ##### 订单查询接口
 * [订单查询](https://open.douyin.com/goodlife/v1/trade/order/query/)
 ##### 门店相关接口
@@ -173,6 +175,22 @@ public function test_refund_query()
     $accountId = config('verify.dy.account_id');
 
     $res = new Application($this->token)->refundQuery($accountId, $orderId, $certId);
+    var_dump($res->getReason());
+    var_dump($res->getList());
+}
+```
+
+* 退款单列表查询
+```php
+public function test_refund_list_query()
+{
+
+    $params = [
+        'account_id' => config('verify.dy.account_id'),
+        'page_size' => 2
+    ];
+
+    $res = new Application($this->token)->refundListQuery($params);
     var_dump($res->getReason());
     var_dump($res->getList());
 }
