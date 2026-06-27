@@ -3,6 +3,9 @@
 namespace Wu\EasyVerifyDy;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\Rule;
+use Results\RefundApplyResult;
+use Results\RefundAuditResult;
 use Wu\EasyVerifyDy\Results\CancelResult;
 use Wu\EasyVerifyDy\Results\ClientTokenResult;
 use Wu\EasyVerifyDy\Results\CodeQueryByOrderIdResult;
@@ -10,6 +13,7 @@ use Wu\EasyVerifyDy\Results\OrderQueryResult;
 use Wu\EasyVerifyDy\Results\PrepareResult;
 use Wu\EasyVerifyDy\Results\CodeQueryResult;
 use Wu\EasyVerifyDy\Results\RefundQueryResult;
+use Wu\EasyVerifyDy\Results\Result;
 use Wu\EasyVerifyDy\Results\StoreQueryResult;
 use Wu\EasyVerifyDy\Results\VerifyResult;
 
@@ -20,7 +24,8 @@ class Application
     protected string $clientKey = '';
     protected string $clientSecret = '';
 
-    public function __construct(protected $token = ''){
+    public function __construct(protected $token = '')
+    {
         $this->clientKey = config('verify.dy.client_key');
         $this->clientSecret = config('verify.dy.client_secret');
 
@@ -429,6 +434,100 @@ class Application
     }
 
     /**
+     * 发起退款
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/order-refund-apply
+     * @param string $accountId
+     * @param array $refundCode
+     * @param array $codeList
+     * @param array $certificateIdList
+     * @param int|null $amount
+     * @param string $reason
+     * @return RefundApplyResult
+     */
+    public function refundApply(
+        string $accountId,
+        array  $refundCode,
+        array  $codeList = [],
+        array  $certificateIdList = [],
+        ?int   $amount = null,
+        string $reason = ''
+    ): RefundApplyResult
+    {
+
+        validator([
+            'account_id' => $accountId,
+            'refund_reason_code' => $refundCode,
+            'code_list' => $codeList,
+            'certificate_id_list' => $certificateIdList,
+            'refund_reason_desc' => $reason,
+            'token' => $this->token,
+        ], [
+            'refund_reason_code' => 'required|array',
+            'refund_reason_code.*' => 'required|int|in:102,103,106,107,109,114,116,117,118,11,122,123,125,158,161,211,122,213,215,304,305,306,401,402,406,999',
+            'code_list' => 'required_if:certificate_id_list,null|array',
+            'certificate_id_list' => 'required_if:code_list,null|array',
+            'refund_reason_desc' => Rule::requiredIf(function () use ($refundCode) {
+                return isset($refundCode) && in_array('999', $refundCode);
+            }),
+            'account_id' => 'required|string',
+            'token' => 'required|string',
+        ]);
+
+        $params = [
+            'refund_reason_code' => $refundCode,
+            'code_list' => $codeList,
+            'certificate_id_list' => $certificateIdList,
+            'account_id' => $accountId,
+            'refund_amount' => $amount,
+            'refund_reason_desc' => $reason
+        ];
+
+        $url = '/goodlife/v1/groupon/order/refund/apply';
+        return new RefundApplyResult($this->request($url, $params));
+    }
+
+    /**
+     * 退款单列表查询
+     * https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/refund-list-query
+     * @param string $accountId
+     * @param bool $status
+     * @param string $orderId
+     * @param string $certificateId
+     * @param string $reason
+     * @return RefundAuditResult
+     */
+    public function refundAudit(string $accountId, bool $status, string $orderId, string $certificateId, string $reason = ''): RefundAuditResult
+    {
+
+        validator([
+            'account_id' => $accountId,
+            'audit_status' => $status,
+            'order_id' => $orderId,
+            'certificate_id' => $certificateId,
+            'reject_reason' => $reason,
+            'token' => $this->token,
+        ], [
+            'audit_status' => 'required|bool',
+            'order_id' => 'required|string',
+            'certificate_id' => 'required|string',
+            'reject_reason' => 'nullable|string',
+            'account_id' => 'required|string',
+            'token' => 'required|string',
+        ]);
+
+        $params = [
+            'audit_status' => $status,
+            'order_id' => $orderId,
+            'certificate_id' => $certificateId,
+            'account_id' => $accountId,
+            'reject_reason' => $reason
+        ];
+
+        $url = '/goodlife/v1/akte/after_sale/order/audit';
+        return new RefundAuditResult($this->request($url, $params));
+    }
+
+    /**
      * 接口请求
      * @param string $url
      * @param array $params
@@ -466,7 +565,7 @@ class Application
                 ]);
             }
 
-            if($result['data']['error_code'] === 2190008){
+            if ($result['data']['error_code'] === 2190008) {
                 abort(403, $result['data']['description']);
             }
 
