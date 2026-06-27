@@ -1,10 +1,9 @@
 <?php
 
-namespace Results;
+namespace Wu\EasyVerifyDy\Results;
 
 
 use Wu\EasyVerifyCommon\HttpResult;
-use Wu\EasyVerifyDy\Results\Result;
 
 class RefundApplyResult extends Result implements HttpResult
 {

@@ -23,6 +23,8 @@
 ###### 团购退款
 * [售后单详情查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/after-sale-order-detail)
 * [退款单列表查询](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/refund-list-query)
+* [抖音码核销后退款审批](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/system-code-refund-audit)
+* [发起退款](https://developer.open-douyin.com/docs/resource/zh-CN/local-life/develop/OpenAPI/general-capabilities/groupon-refund/order-refund-apply)
 ##### 订单查询接口
 * [订单查询](https://open.douyin.com/goodlife/v1/trade/order/query/)
 ##### 门店相关接口
@@ -193,6 +195,49 @@ public function test_refund_list_query()
     $res = new Application($this->token)->refundListQuery($params);
     var_dump($res->getReason());
     var_dump($res->getList());
+}
+```
+
+* 抖音码核销后退款审批
+```php
+public function test_refund_audit()
+{
+    $accountId = config('verify.dy.account_id');
+    $status = true;
+    $certId = '7513089961583886362';
+    $orderId = '1085741005608348523';
+    $res = new Application($this->token)->refundAudit($accountId, $status, $orderId, $certId);
+    var_dump($res->getReason());
+    var_dump($res->isReentry());
+}
+```
+
+* 发起退款
+```php
+public function test_refund_apply()
+{
+    $accountId = config('verify.dy.account_id');
+    $refundCode = [
+        3231251066750117689,
+    ];
+    $certIdList = ['AuPlFaur4a'];
+    $codeList = ['Acc34S7XuI'];
+    $orderId = 'P3tdpU7OMG';
+    $res = new Application($this->token)->refundApply(
+        $accountId,
+        $orderId,
+        $refundCode,
+        reason: 'm5w94r0pG5',
+        codeList: $codeList,
+        certificateIdList: $certIdList,
+        amount: 5258743426434471972,
+        outAfterSaleId: '8AENsc2iMo'
+    );
+    var_dump($res->getReason());
+    echo $res->isApplySuccess(), PHP_EOL;
+    echo $res->getOrderId(), PHP_EOL;
+    echo $res->getAfterSaleId(), PHP_EOL;
+    var_dump($res->getAfterSaleInfoList());
 }
 ```
 
